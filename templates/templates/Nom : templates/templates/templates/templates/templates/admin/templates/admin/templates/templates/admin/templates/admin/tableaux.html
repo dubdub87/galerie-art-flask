@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Gérer les œuvres - Admin{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Gestion des Œuvres</h1>
+            <div>
+                <a href="{{ url_for('admin_nouveau_tableau') }}" class="btn btn-primary">➕ Nouvelle œuvre</a>
+                <a href="{{ url_for('admin_export_liste') }}" class="btn btn-outline-secondary">📄 Export PDF</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Titre</th>
+                                <th>Format</th>
+                                <th>Technique</th>
+                                <th>Prix</th>
+                                <th>Qté</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tableau in tableaux.items %}
+                            <tr>
+                                <td>
+                                    {% if tableau.photo %}
+                                        <img src="data:image/jpeg;base64,{{ tableau.photo }}" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;" alt="{{ tableau.titre }}">
+                                    {% else %}
+                                        <div class="bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                            <span style="font-size: 1.5rem;">🎨</span>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <strong>{{ tableau.titre }}</strong><br>
+                                    <small class="text-muted">{{ tableau.themes or 'Pas de thème' }}</small>
+                                </td>
+                                <td>{{ tableau.format_hxl }} cm</td>
+                                <td>{{ tableau.technique }}</td>
+                                <td><strong>{{ tableau.prix }}€</strong></td>
+                                <td>
+                                    {{ tableau.qte_tableaux }}<br>
+                                    <small class="text-muted">{{ tableau.qte_reproduits }} reproduits</small>
+                                </td>
+                                <td>{{ tableau.date_crea.strftime('%d/%m/%Y') }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ url_for('tableau_detail', id=tableau.id) }}" class="btn btn-sm btn-outline-info" title="Voir">👁️</a>
+                                        <a href="{{ url_for('admin_modifier_tableau', id=tableau.id) }}" class="btn btn-sm btn-outline-primary" title="Modifier">✏️</a>
+                                        <a href="{{ url_for('admin_imprimer_tableau', id=tableau.id) }}" class="btn btn-sm btn-outline-secondary" title="Imprimer">🖨️</a>
+                                        <form method="POST" action="{{ url_for('admin_supprimer_tableau', id=tableau.id) }}" style="display: inline;" 
+                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette œuvre ?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">🗑️</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                {% if tableaux.pages > 1 %}
+                <nav aria-label="Pagination admin">
+                    <ul class="pagination justify-content-center">
+                        {% if tableaux.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin_tableaux', page=tableaux.prev_num) }}">Précédent</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for page_num in tableaux.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num != tableaux.page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('admin_tableaux', page=page_num) }}">{{ page_num }}</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                                {% endif %}
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">…</span>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if tableaux.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin_tableaux', page=tableaux.next_num) }}">Suivant</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
