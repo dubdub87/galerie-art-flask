@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tableau.titre }} - {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    {% if tableau.photo %}
+                        <img src="data:image/jpeg;base64,{{ tableau.photo }}" class="card-img-top" alt="{{ tableau.titre }}">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                            <span style="font-size: 8rem; color: #8b5a3c;">🎨</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>{{ tableau.titre }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td><strong>Format:</strong></td>
+                                <td>{{ tableau.format_hxl }} cm</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Technique:</strong></td>
+                                <td>{{ tableau.technique }}</td>
+                            </tr>
+                            {% if tableau.themes %}
+                            <tr>
+                                <td><strong>Thèmes:</strong></td>
+                                <td>{{ tableau.themes }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if tableau.lieux %}
+                            <tr>
+                                <td><strong>Lieux:</strong></td>
+                                <td>{{ tableau.lieux }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td><strong>Quantité:</strong></td>
+                                <td>{{ tableau.qte_tableaux }}</td>
+                            </tr>
+                            {% if tableau.qte_reproduits > 0 %}
+                            <tr>
+                                <td><strong>Reproduits:</strong></td>
+                                <td>{{ tableau.qte_reproduits }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td><strong>Créé le:</strong></td>
+                                <td>{{ tableau.date_crea.strftime('%d/%m/%Y') }}</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="text-center mt-4">
+                            <h4 class="text-primary">{{ tableau.prix }}€</h4>
+                            <a href="{{ url_for('contacter') }}" class="btn btn-primary btn-lg">Contactez-moi</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <a href="{{ url_for('galerie') }}" class="btn btn-outline-secondary">🔙 Retour à la galerie</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
