@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}{{ action }} une œuvre - Admin{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>{{ action }} une œuvre</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.qte_tableaux.label(class="form-label") }}
+                                    {{ form.qte_tableaux(class="form-control") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.qte_reproduits.label(class="form-label") }}
+                                    {{ form.qte_reproduits(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.titre.label(class="form-label") }}
+                                {{ form.titre(class="form-control") }}
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.largeur.label(class="form-label") }}
+                                    {{ form.largeur(class="form-control") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.hauteur.label(class="form-label") }}
+                                    {{ form.hauteur(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.technique.label(class="form-label") }}
+                                {{ form.technique(class="form-control") }}
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.themes.label(class="form-label") }}
+                                {{ form.themes(class="form-control", placeholder="ex: Paysage, Nature, Abstrait") }}
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.prix.label(class="form-label") }}
+                                    {{ form.prix(class="form-control") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.lieux.label(class="form-label") }}
+                                    {{ form.lieux(class="form-control", placeholder="ex: Atelier, Exposition, Collection privée") }}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.photo.label(class="form-label") }}
+                                {{ form.photo(class="form-control") }}
+                                <div class="form-text">Formats acceptés: JPG, PNG, GIF (max 16MB)</div>
+                                
+                                {% if tableau and tableau.photo %}
+                                <div class="mt-2">
+                                    <small class="text-muted">Image actuelle:</small><br>
+                                    <img src="data:image/jpeg;base64,{{ tableau.photo }}" class="img-thumbnail mt-1" style="max-width: 200px; max-height: 200px;" alt="{{ tableau.titre }}">
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ url_for('admin_tableaux') }}" class="btn btn-secondary">🔙 Retour</a>
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
