@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Admin - {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h1 class="mb-4">Tableau de Bord</h1>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card text-white bg-primary">
+                    <div class="card-header">Total des œuvres</div>
+                    <div class="card-body">
+                        <h2 class="card-title">{{ total_tableaux }}</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Actions rapides</h5>
+                        <a href="{{ url_for('admin_nouveau_tableau') }}" class="btn btn-primary">➕ Nouvelle œuvre</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <a href="{{ url_for('admin_tableaux') }}" class="btn btn-outline-primary w-100">📋 Gérer les œuvres</a>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <a href="{{ url_for('admin_export_liste') }}" class="btn btn-outline-secondary w-100">📄 Export PDF</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Dernières œuvres ajoutées</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Format</th>
+                                        <th>Technique</th>
+                                        <th>Prix</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tableau in derniers_tableaux %}
+                                    <tr>
+                                        <td>{{ tableau.titre }}</td>
+                                        <td>{{ tableau.format_hxl }} cm</td>
+                                        <td>{{ tableau.technique }}</td>
+                                        <td>{{ tableau.prix }}€</td>
+                                        <td>{{ tableau.date_crea.strftime('%d/%m/%Y') }}</td>
+                                        <td>
+                                            <a href="{{ url_for('admin_modifier_tableau', id=tableau.id) }}" class="btn btn-sm btn-outline-primary">✏️</a>
+                                            <a href="{{ url_for('admin_imprimer_tableau', id=tableau.id) }}" class="btn btn-sm btn-outline-info">🖨️</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
