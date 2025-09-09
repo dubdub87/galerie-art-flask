@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient text-white text-center py-5" style="background: linear-gradient(135deg, #d4a574 0%, #8b5a3c 100%);">
+    <div class="container">
+        <h1 class="display-4 mb-4">Bienvenue dans ma Galerie</h1>
+        <p class="lead mb-4">Découvrez mes créations artistiques, entre tradition et modernité</p>
+        <a href="{{ url_for('galerie') }}" class="btn btn-light btn-lg">Découvrir mes œuvres</a>
+    </div>
+</section>
+
+<!-- Carrousel des dernières œuvres -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4" style="color: #8b5a3c;">Mes Dernières Créations</h2>
+        
+        {% if derniers_tableaux %}
+        <div id="carrouselOeuvres" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for tableau in derniers_tableaux %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="card tableau-card">
+                                <div class="row g-0">
+                                    <div class="col-md-6">
+                                        {% if tableau.photo %}
+                                            <img src="data:image/jpeg;base64,{{ tableau.photo }}" class="img-fluid carrousel-item" alt="{{ tableau.titre }}">
+                                        {% else %}
+                                            <div class="d-flex align-items-center justify-content-center carrousel-item bg-light">
+                                                <span style="font-size: 4rem; color: #8b5a3c;">🎨</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ tableau.titre }}</h5>
+                                            <p class="card-text">
+                                                <strong>Format:</strong> {{ tableau.format_hxl }} cm<br>
+                                                <strong>Technique:</strong> {{ tableau.technique }}<br>
+                                                {% if tableau.themes %}
+                                                <strong>Thèmes:</strong> {{ tableau.themes }}<br>
+                                                {% endif %}
+                                            </p>
+                                            <p class="card-text"><strong class="text-primary">{{ tableau.prix }}€</strong></p>
+                                            <a href="{{ url_for('tableau_detail', id=tableau.id) }}" class="btn btn-primary">Voir détails</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#carrouselOeuvres" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle p-3"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carrouselOeuvres" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle p-3"></span>
+            </button>
+        </div>
+        {% else %}
+        <div class="text-center">
+            <p class="lead">Aucune œuvre disponible pour le moment.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Section À propos -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 style="color: #8b5a3c;">À Propos de l'Artiste</h2>
+                <p class="lead">Passionné par l'art depuis mon plus jeune âge, je crée des œuvres qui racontent des histoires et transmettent des émotions.</p>
+                <p>Mon style unique mélange techniques traditionnelles et approches contemporaines. Chaque toile est une nouvelle aventure, une exploration de couleurs, de formes et de sentiments.</p>
+                <a href="{{ url_for('contacter') }}" class="btn btn-primary">Me contacter</a>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center" 
+                     style="width: 200px; height: 200px; background: linear-gradient(135deg, #8b5a3c, #d4a574);">
+                    <span style="font-size: 4rem; color: white;">👨‍🎨</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
