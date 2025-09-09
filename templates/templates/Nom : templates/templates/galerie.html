@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Galerie - {{ super() }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h1 class="text-center mb-5" style="color: #8b5a3c;">Ma Galerie</h1>
+        
+        <div class="row">
+            {% for tableau in tableaux.items %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card tableau-card h-100">
+                    {% if tableau.photo %}
+                        <img src="data:image/jpeg;base64,{{ tableau.photo }}" class="card-img-top" style="height: 250px; object-fit: cover;" alt="{{ tableau.titre }}">
+                    {% else %}
+                        <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                            <span style="font-size: 4rem; color: #8b5a3c;">🎨</span>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ tableau.titre }}</h5>
+                        <p class="card-text">
+                            <small class="text-muted">{{ tableau.format_hxl }} cm • {{ tableau.technique }}</small>
+                        </p>
+                        {% if tableau.themes %}
+                        <p class="card-text"><small class="text-muted">{{ tableau.themes }}</small></p>
+                        {% endif %}
+                        <p class="card-text mt-auto"><strong style="color: #8b5a3c;">{{ tableau.prix }}€</strong></p>
+                        <a href="{{ url_for('tableau_detail', id=tableau.id) }}" class="btn btn-primary">Voir détails</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if tableaux.pages > 1 %}
+        <nav aria-label="Pagination galerie">
+            <ul class="pagination justify-content-center">
+                {% if tableaux.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('galerie', page=tableaux.prev_num) }}">Précédent</a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in tableaux.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != tableaux.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('galerie', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">…</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if tableaux.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('galerie', page=tableaux.next_num) }}">Suivant</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
